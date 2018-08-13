@@ -1,6 +1,6 @@
-const actionReducer = (action) => {
+const actionReducer = (action, event, xstate) => {
   if(action === 'consoleLog') {
-    console.log('Fired action: consoleLog')
+    console.log('Fired action:', action, event, xstate);
   }
 }
 

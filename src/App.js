@@ -28,26 +28,21 @@ injectGlobal`
 `
 
 class App extends Component {
- 
-  constructor(props) {
-    super(props);
-  }
-  
-  handleClick() {
-    console.log('button clicked');
-    //this.props.transition({ type: 'CLICK' });
+
+  handleClick = () => {
+    this.props.transition({ type: 'CLICK', message: 'moo'});
   }
   
   render() {
        
     const { xstate: { value: state } } = this.props;
-    console.log(`State: ${JSON.stringify(state)}`);
+    console.log(`State: ${state}`);
 
     return (
       <Layout>
-        <header>Mental Checklist <button onClick={this.handleClick()}>&#9881;</button></header>
+        <header>Mental Checklist - { state } <button onClick={this.handleClick}>&#9881;</button></header>
         <main>
-            <ChessBoardWrapper width='600px' />
+            <ChessBoardWrapper width='400px' />
             <InfoPanel>It's your turn to move.</InfoPanel>
         </main> 
         <footer>
