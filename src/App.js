@@ -1,13 +1,11 @@
 import React, { Component } from 'react'
-import { mountXstate } from 'react-xstate'
 import { injectGlobal } from 'styled-components'
+
+import GameMachine from './state/GameMachine';
 
 import Layout from './components/Layout'
 import InfoPanel from './components/InfoPanel'
 import ChessBoardWrapper from './components/ChessBoardWrapper'
-
-import stateMachine from './state/stateMachine'
-import actionReducer  from './state/actionReducer'
 
 injectGlobal`
   header, main, footer {
@@ -30,27 +28,25 @@ injectGlobal`
 class App extends Component {
 
   handleClick = () => {
-    this.props.transition({ type: 'CLICK', message: 'moo'});
+    console.log('click');
   }
   
   render() {
-       
-    const { xstate: { value: state } } = this.props;
-    console.log(`State: ${state}`);
-
     return (
-      <Layout>
-        <header>Mental Checklist - { state } <button onClick={this.handleClick}>&#9881;</button></header>
-        <main>
-            <ChessBoardWrapper width='400px' />
-            <InfoPanel>It's your turn to move.</InfoPanel>
-        </main> 
-        <footer>
-          &copy;Footer 2018
-        </footer>
-      </Layout>
+      <GameMachine.Provider>
+        <Layout>
+          <header>Mental Checklist <button onClick={this.handleClick}>&#9881;</button></header>
+          <main>
+              <ChessBoardWrapper width='400px' />
+              <InfoPanel>It's your turn to move.</InfoPanel>
+          </main> 
+          <footer>
+            &copy;Footer 2018
+          </footer>
+        </Layout>
+      </GameMachine.Provider>
     );
   }
 }
 
-export default mountXstate(stateMachine, [actionReducer])(App)
+export default App

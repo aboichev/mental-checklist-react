@@ -3,10 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@avaragado/xstateful": "^0.5.0",
+    "@avaragado/xstateful-react": "^0.6.0",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
     "react-scripts": "1.1.4",
-    "react-xstate": "^0.1.3",
     "styled-components": "^3.4.2",
     "xstate": "^3.3.3"
   },
