@@ -5,29 +5,49 @@ import { createReactMachine } from '@avaragado/xstateful-react';
 import reducer from './actions';
 
 const machine = Machine({
-    initial: 'startScreen',
+    initial: 'main',
     states: {
-        startScreen: {
-        on: {
-            CLICK: {
-            game: { actions: ['consoleLog'] }
-            }
-        }
+        main: {
+          initial: 'startScreen',
+          on: {
+              OPEN_SETTINGS: 'settingsScreen'
+          },
+          states: {
+            
+            startScreen: {
+              on: {
+                  START_GAME: {
+                    game: { actions: ['consoleLog'] }
+                  }
+              }
+            },
+            
+            game: {
+              on: {
+                  CLICK: {
+                    summaryScreen: { actions: ['consoleLog'] }
+                  }
+              }
+            },
+            
+            summaryScreen: {
+              on: {
+                  CLICK: {
+                    startScreen: { actions: ['consoleLog'] }
+                  }
+              }
+            },
+            
+            hist: { history: true }
+          }
         },
-        game: {
-        on: {
-            CLICK: {
-            summaryScreen: { actions: ['consoleLog'] }
-            }
-        }
+
+        settingsScreen: {
+          on: {
+             CLOSE_SETTINGS: 'main.hist'
+          }              
         },
-        summaryScreen: {
-        on: {
-            CLICK: {
-            startScreen: { actions: ['consoleLog'] }
-            }
-        }
-        }
+
     }
 });
 
