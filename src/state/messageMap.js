@@ -1,7 +1,8 @@
 const messages = {
   main: {
     startScreen: "Welcome to Chess Mental Checklist!",
-    game: "It's on. Make your move"
+    game: "It's on. Make your move",
+    scoreScreen: "Game's over \n Your score is: 0"
   }
 }
 

@@ -25,14 +25,14 @@ const machine = Machine({
             game: {
               on: {
                   CLICK: {
-                    summaryScreen: { actions: ['consoleLog'] }
+                    scoreScreen: { actions: ['consoleLog'] }
                   }
               }
             },
             
-            summaryScreen: {
+            scoreScreen: {
               on: {
-                  CLICK: {
+                  START_OVER: {
                     startScreen: { actions: ['consoleLog'] }
                   }
               }
@@ -46,7 +46,7 @@ const machine = Machine({
           on: {
              CLOSE_SETTINGS: 'main.hist'
           }              
-        },
+        }
 
     }
 });

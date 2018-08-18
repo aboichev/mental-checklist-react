@@ -15,7 +15,7 @@ const SettingsButton = ({ event, bg }) => (
         render={({ transition }) => (
             <GearButton type="button" onClick={() => transition(event)}>
                 <svg version="1.1" width="20px" height="20px"
-                    enable-background="new 0 0 512 512"
+                    enableBackground="new 0 0 512 512"
                     viewBox="0 0 512 512"
                     xmlSpace="preserve"
                     xmlns="http://www.w3.org/2000/svg"

@@ -1,14 +1,14 @@
 import React from 'react'
 import styled from 'styled-components';
 
-let board = null;
 
 class ChessBoard extends React.Component {
   componentDidMount() {
+    console.log('in ChessBoard componentDidMount');
     const $ = window.$;
     const ChessBoard = window.ChessBoard;
     this.$el = $(this.el);
-    board = ChessBoard(this.$el, {
+    this.board = ChessBoard(this.$el, {
       draggable: true,
       position: 'start',
       onChange: (oldPos, newPos) => {
@@ -18,8 +18,8 @@ class ChessBoard extends React.Component {
   }
 
   componentWillUnmount() {
-    if (board) {
-      board.destroy();
+    if (this.board) {
+      this.board.destroy();
     }
   }
 

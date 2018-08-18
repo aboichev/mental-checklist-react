@@ -1,5 +1,4 @@
 import React from 'react'
-import GameMachine from 'state/GameMachine'
 import styled from 'styled-components'
 import Message from 'components/ui/Message'
 import EventButton from 'components/ui/EventButton'
@@ -13,12 +12,10 @@ const ScoreScreenPanel = styled.section`
 `;
 
 const ScoreScreen = ({ color }) => (
-    <GameMachine.State is='startScreen'>
-      <ScoreScreenPanel>
-      <Message color="green" />
-        <EventButton event="START_OVER" bg="yellow">StartOver</EventButton>
-      </ScoreScreenPanel>
-    </GameMachine.State>
+  <ScoreScreenPanel>
+    <Message color="green" />
+    <EventButton event="START_OVER" bg="yellow">Start Over</EventButton>
+  </ScoreScreenPanel>
 );
 
 export default ScoreScreen;
