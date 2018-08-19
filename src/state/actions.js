@@ -1,15 +1,29 @@
 import { Reducer } from '@avaragado/xstateful';
+import { init } from 'game/utils';
 
 const actions = Reducer.map({
-  timeout: Reducer.util.timeoutActivity({
-      activity: 'to_p_prepare',
-      ms: 2,
-      event: 'TIMEOUT',
-  }),
+  
   consoleLog: () => {
     console.log('consoleLog');
   },
-  clearRequestStop: Reducer.update({ isRequested: false }),
+  
+  initGame: ({ extstate: xs }) => {
+    console.log('in initGame action');
+    const game = init();
+    return Reducer.update({ game });
+  }, 
+  
+  validateMove: ({ extstate: xs, event }) => {
+    console.log('in validateMove action');
+    const game = xs.game;
+    game.move({
+      from: event.source,
+      to: event.target,
+      promotion: 'q' // NOTE: always promote to a queen for example simplicity
+    });
+    return Reducer.update({ game });
+  }, 
+  
 });
 
 export default actions;

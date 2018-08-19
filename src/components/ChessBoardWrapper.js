@@ -4,15 +4,19 @@ import styled from 'styled-components';
 
 class ChessBoard extends React.Component {
   componentDidMount() {
-    console.log('in ChessBoard componentDidMount');
+    const { game } = this.props;
+    console.log('in ChessBoard componentDidMount', 'fen', game.fen());
     const $ = window.$;
     const ChessBoard = window.ChessBoard;
     this.$el = $(this.el);
     this.board = ChessBoard(this.$el, {
       draggable: true,
-      position: 'start',
-      onChange: (oldPos, newPos) => {
-        console.log('onChange');
+      position: game.fen(),
+      onDrop: (source, target) => {
+        this.props.onChange(source, target);
+      },
+      onSnapEnd: () => {
+        this.board.position(game.fen());
       }
    });
   }

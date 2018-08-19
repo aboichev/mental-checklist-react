@@ -32,10 +32,6 @@ injectGlobal`
 `
 
 class App extends Component {
-
-  handleClick = () => {
-    console.log('click');
-  }
   
   render() {
     return (
@@ -51,9 +47,20 @@ class App extends Component {
               <GameMachine.State is="main.startScreen">
                 <StartScreen />
               </GameMachine.State>
-              <GameMachine.State is="main.game">
-                <GameScreen />
-              </GameMachine.State>
+              
+              <GameMachine.State is="main.game"
+                  render={({ extstate, transition }) => (
+                     <GameScreen 
+                       game={ extstate.game }
+                       onChange={ (source, target) => transition({
+                            type: 'BOARD_CHANGED',
+                            source,
+                            target
+                       })}
+                     />
+                  )}
+               />
+                
               <GameMachine.State is="main.scoreScreen">
                 <ScoreScreen />
               </GameMachine.State>

@@ -17,15 +17,16 @@ const machine = Machine({
             startScreen: {
               on: {
                   START_GAME: {
-                    game: { actions: ['consoleLog'] }
+                    game: { actions: ['initGame'] }
                   }
               }
             },
             
             game: {
               on: {
-                  CLICK: {
-                    scoreScreen: { actions: ['consoleLog'] }
+                  START_OVER: 'startScreen',
+                  BOARD_CHANGED: {
+                    game: { actions: ['validateMove'] }
                   }
               }
             },
@@ -51,5 +52,5 @@ const machine = Machine({
     }
 });
 
-export const xsf = createStatefulMachine({ machine, reducer, extstate: {} });
+export const xsf = createStatefulMachine({ machine, reducer });
 export default createReactMachine(xsf);

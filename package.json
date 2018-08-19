@@ -5,6 +5,7 @@
   "dependencies": {
     "@avaragado/xstateful": "^0.5.0",
     "@avaragado/xstateful-react": "^0.6.0",
+    "chess.js": "^0.10.2",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
     "react-scripts": "1.1.4",
