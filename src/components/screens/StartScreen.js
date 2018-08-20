@@ -3,6 +3,7 @@ import GameMachine from 'state/GameMachine'
 import styled from 'styled-components'
 import Message from 'components/ui/Message'
 import EventButton from 'components/ui/EventButton'
+import SideSelect from 'components/ui/SideSelect'
 
 // Create a Title component that'll render an <h1> tag with some styles
 const StartScreenPanel = styled.section`
@@ -16,11 +17,15 @@ const StartScreenPanel = styled.section`
   }
 `;
 
-const StartScreen = ({ color }) => (
+const StartScreen = ({ color, ...props }) => (
     <GameMachine.State is='main.startScreen'>
       <StartScreenPanel>
         <Message color="green" />
-        <EventButton event="START_GAME" bg="green">Let' Start</EventButton>
+        <SideSelect {...props} />
+        <div>
+          <EventButton event="START_GAME" bg="green">Let' Start</EventButton>
+        </div>
+
       </StartScreenPanel>
     </GameMachine.State>
 );

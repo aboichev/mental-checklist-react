@@ -43,15 +43,17 @@ class App extends Component {
                 <SettingsButton event='OPEN_SETTINGS'>&#9881; Options</SettingsButton>
               </GameMachine.State>
             </header>
-            <main>
-              <GameMachine.State is="main.startScreen">
-                <StartScreen />
-              </GameMachine.State>
-              
+            <main>              
+              <GameMachine.State is="main.startScreen"
+                render={({ extstate }) => (
+                  <StartScreen playerSide={ extstate.playerSide } />
+                )}
+              />               
+             
               <GameMachine.State is="main.game"
                   render={({ extstate, transition }) => (
                      <GameScreen 
-                       game={ extstate.game }
+                       state={ extstate }                       
                        onChange={ (source, target) => transition({
                             type: 'BOARD_CHANGED',
                             source,

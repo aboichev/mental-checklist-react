@@ -18,16 +18,48 @@ const machine = Machine({
               on: {
                   START_GAME: {
                     game: { actions: ['initGame'] }
+                  },
+                  PLAYER_SWITCHES_SIDE: {
+                    startScreen: { actions: ['playerSwitchesSide'] }
                   }
               }
             },
             
             game: {
+              initial: 'firstMove',
               on: {
-                  START_OVER: 'startScreen',
-                  BOARD_CHANGED: {
-                    game: { actions: ['validateMove'] }
+                  START_OVER: 'startScreen'
+              },
+              states: {
+                firstMove: {
+                  on: {
+                    NO_TREATS: 'feedback'
                   }
+                },
+                waitForCaptureAnswer: {
+                  on: {
+                    NO_TREATS: 'feedback',
+                    BOARD_CHANGED: 'feedback'
+                  }               
+                },
+                feedback: {
+                  onEntry: ['validateResponse'],
+                  on: {
+                    CONTINUE: 'waitForPlayerTurn'
+                  }
+                },
+                tryAgain: {
+                  on: {
+                    OK: 'waitForPlayerTurn'
+                  }
+                },
+                waitForPlayerTurn: {
+                  on: {
+                    BOARD_CHANGED: {
+                      waitForCaptureAnswer: { actions: ['validateMove', 'computerMakesMove'] }
+                    }
+                  }
+                }                
               }
             },
             
@@ -48,9 +80,10 @@ const machine = Machine({
              CLOSE_SETTINGS: 'main.hist'
           }              
         }
-
     }
 });
 
-export const xsf = createStatefulMachine({ machine, reducer });
+const extstate = { playerSide: 'w'};
+
+export const xsf = createStatefulMachine({ machine, reducer, extstate });
 export default createReactMachine(xsf);
