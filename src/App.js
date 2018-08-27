@@ -55,9 +55,11 @@ class App extends Component {
                      <GameScreen 
                        state={ extstate }                       
                        onChange={ (source, target) => transition({
-                            type: 'BOARD_CHANGED',
-                            source,
-                            target
+                            type: 'INPUT',
+                            input: {
+                              from: source,
+                              to: target
+                            }
                        })}
                      />
                   )}

@@ -7,7 +7,10 @@ const messages = {
           which means any possible capture of your pawns or peaces.
           You are about to make you first turn, do you think any captures even possible?
           If you think there are no treats just click "I see no treats" button.
-        `
+        `,
+      challenge: `Now show all treats by moving your opponent pieces and capturing
+      yours. When you done with all, click "I see no more threats".`,
+      move: `It's your turn to move now.`
     },
     scoreScreen: "Game's over. Your score is: 0"
   }

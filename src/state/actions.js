@@ -1,5 +1,6 @@
 import { Reducer } from '@avaragado/xstateful';
 import { init, makeRandomMove, validateCaptures } from 'game/utils';
+import { isGameOver } from '../game/utils';
 
 const actions = Reducer.map({  
  
@@ -9,54 +10,50 @@ const actions = Reducer.map({
     return Reducer.update({ game });
   },
 
-  computerMakesMove: ({ extstate: xs }) => {
-    console.log('in moveIfComputerPlaysWhite action');
-    const game = xs.game;    
-    if (game.turn() !== xs.playerSide) {
-      makeRandomMove(xs.game);
-    } 
-    return Reducer.update({ game });
-  },
-
-  playerSwitchesSide: ({ extstate: xs, event }) => {
+  playerSwitchesSide: ({ event }) => {
     console.log('in playerSwitchesSide action');    
     const playerSide = event.playerSide;
     return Reducer.update({ playerSide });
   },
 
-  validateResponse: ({ extstate: xs, event, transition }) => {
-    console.log('in validateResponse action');
+  validateChallenge: ({ extstate: xs, event, transition }) => {
     const game = xs.game;
-    const userAnswers = xs.userAnswers || [];
-    if (event.source && event.target) {
-      userAnswers.push({from: event.source, to: event.target });
+    console.log('in validate action', xs, game);
+    
+    if (isGameOver(game)) {
+      console.log('Game Over');
+      return Reducer.effect(xsf => xsf.transition('GAME_OVER'));
     }
 
-    let nextEvent;
-    if (validateCaptures(game, userAnswers) === 'done') {
-      nextEvent = 'CONTINUE';
+    const input = event.input;
+    let previousResponses = xs.previousResponses || [];
+
+    console.log('event', input, previousResponses);
+    if (validateCaptures(game, input, previousResponses)) {
+      previousResponses = [];
+      return Reducer.updateWithEffect({ previousResponses }, xsf => xsf.transition('CONTINUE'));
     }
-    else {
-      nextEvent = 'TRY_AGAIN';
-    }
-    console.log('nextEvent', nextEvent);
-    return Reducer.effect(xsf => {
-      setTimeout(() => xsf.transition(nextEvent), 1000);
-    });
+    console.log('more input needed', input, previousResponses);
+
+    return Reducer.update({ previousResponses });
   },
   
   validateMove: ({ extstate: xs, event }) => {
     console.log('in validateMove action');
     const game = xs.game;
 
-    const result = game.move({
-      from: event.source,
-      to: event.target,
+    const validMove = game.move({
+      from: event.input.from,
+      to: event.input.to,
       promotion: 'q' // NOTE: always promote to a queen for example simplicity
     });
-    console.log('move:', event.source, event.target, result);
+
+    if (validMove) {
+      makeRandomMove(xs.game, xs.playerSide);
+    }
+
     return Reducer.update({ game });
-  }, 
+  },
   
 });
 

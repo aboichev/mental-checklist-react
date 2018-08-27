@@ -14,12 +14,14 @@ const GameScreen = ({ ...props }) => (
           render={({ state }) => (
             <React.Fragment>
               <Message width='400px' stateKey={state} />
-              <GameMachine.State is={['main.game.firstMove',
-                                      'main.game.waitForCaptureAnswer']}>
-                <EventButton event="NO_TREATS">
-                  I see no threats
-                </EventButton>
-              </GameMachine.State>
+              <GameMachine.State 
+                  is={['main.game.firstMove',
+                       'main.game.challenge']}
+                  render={(state) => (
+                    <EventButton event={{type: 'INPUT', input: { noTreats: true}}}>
+                      I see no threats
+                    </EventButton>
+                  )} />
             </React.Fragment>
           )}
       />   
