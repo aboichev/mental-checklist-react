@@ -28,11 +28,12 @@ const validateCaptures = (game, input, previousResponses = []) => {
   }
   
   const notSameAsBefore = previousResponses.find(matchMove(input)) === undefined;
-  const foundCapture    = captures.find(matchMove(input)) !== undefined;
+  const foundCapture    = captures.find(matchMove(input));
 
   console.log('is valid?', notSameAsBefore, foundCapture);
   if (notSameAsBefore && foundCapture) {
     console.log('adding to previous responses', notSameAsBefore, foundCapture);
+    input.san = foundCapture.san;
     previousResponses.push(input);
   }
 
