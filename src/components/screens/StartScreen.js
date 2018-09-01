@@ -1,7 +1,7 @@
 import React from 'react'
 import GameMachine from 'state/GameMachine'
 import styled from 'styled-components'
-import Message from 'components/ui/Message'
+import WelcomeMessage from 'components/messages/WelcomeMessage'
 import EventButton from 'components/ui/EventButton'
 import SideSelect from 'components/ui/SideSelect'
 
@@ -20,12 +20,11 @@ const StartScreenPanel = styled.section`
 const StartScreen = ({ color, ...props }) => (
     <GameMachine.State is='main.startScreen'>
       <StartScreenPanel>
-        <Message color="green" />
+        <WelcomeMessage />
         <SideSelect {...props} />
         <div>
           <EventButton event="START_GAME" bg="green">Let' Start</EventButton>
         </div>
-
       </StartScreenPanel>
     </GameMachine.State>
 );

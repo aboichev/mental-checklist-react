@@ -1,10 +1,19 @@
 import Chess from 'chess.js'
 
-const init = (playerSide) => {
-  const game = new Chess();
-  if (playerSide === 'b') {
+const init = (playerSide, fen = null) => {
+
+  const game = fen === null ? new Chess() : new Chess(fen);;
+  if (game == null) {
+    throw new Error('invalid game');
+  }
+  if (playerSide !== 'w' && playerSide !== 'b') {
+    throw new Error("invalid player's side argument");
+  }
+
+  if (game.turn() !== playerSide) {
     makeRandomMove(game);
   }
+
   return game;
 };
 
@@ -38,7 +47,23 @@ const validateCaptures = (game, input, previousResponses = []) => {
   }
 
   return false;
-}
+};
+
+const isValidMove = (game, event) => {
+  const move = game.move({
+    from: event.input.from,
+    to: event.input.to,
+    promotion: 'q' // TODO: implement promotion use case
+  });
+
+  return move !== null;
+};
+
+const validateSettings = (event) => {
+  const tempGame = new Chess();
+  console.log('event', event);
+  return tempGame.validate_fen(event.input.fen);
+};
 
 const matchMove = (input) => x => 
         input.from === x.from && input.to === x.to;
@@ -49,27 +74,31 @@ const getCaptures = (game) => {
   fenArr[1] = fenArr[1] === 'w' ? 'b' : 'w';
   // remove en-passant square
   fenArr[3] = '-';
-  const fakeGameFen = fenArr.join(' ');
-  //console.log('fakeGameFen', fakeGameFen);
-  const fakeGame = new Chess();
-  const validation = fakeGame.validate_fen(fakeGameFen);
+  const fen = fenArr.join(' ');
+  const tempGame = new Chess();
+  const validation = tempGame.validate_fen(fen);
   if (!validation.valid) {
     throw new Error(validation.error);
   }
 
-  fakeGame.load(fakeGameFen);
+  tempGame.load(fen);
 
-  const moves = fakeGame
+  const moves = tempGame
       .moves({verbose: true});
-  //console.log('opponents moves', moves);
 
-  const captures = moves.filter(x => x.flags === 'c' || x.flags === 'pc');
+      const captures = moves.filter(x => x.flags === 'c' || x.flags === 'pc');
 
   return captures;
-}
+};
 
 const isGameOver = (game) =>  {
   return game.game_over() === true || game.moves().length === 0;
-}
+};
 
-export { init, makeRandomMove, validateCaptures, isGameOver };
+export { init,
+  makeRandomMove, 
+  validateCaptures,
+  isGameOver,
+  isValidMove,
+  validateSettings
+};

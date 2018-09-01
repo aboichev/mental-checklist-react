@@ -2,7 +2,9 @@ import React from 'react'
 import GameMachine from 'state/GameMachine'
 import ChessBoardWrapper from 'components/ChessBoardWrapper'
 import InfoPanel from 'components/ui/InfoPanel'
-import Message from 'components/ui/Message'
+import FirstMoveMessage from 'components/messages/FirstMoveMessage'
+import ChallengeMessage from 'components/messages/ChallengeMessage';
+import MoveMessage from 'components/messages/MoveMessage';
 import EventButton from 'components/ui/EventButton'
 import ResponseList from 'components/ui/ResponseList'
 
@@ -12,9 +14,17 @@ const GameScreen = ({ ...props }) => (
     <InfoPanel>
       <GameMachine.State
           is="main"
-          render={({ state, extstate }) => (
+          render={({ extstate }) => (
             <React.Fragment>
-              <Message width='400px' stateKey={state} />
+              <GameMachine.State is="main.game.firstMove">
+                <FirstMoveMessage width='400px' />
+              </GameMachine.State>
+              <GameMachine.State is="main.game.challenge">
+                <ChallengeMessage width='400px' />
+              </GameMachine.State>
+              <GameMachine.State is="main.game.move">
+                <MoveMessage width='400px' />
+              </GameMachine.State>              
               <GameMachine.State 
                   is={['main.game.firstMove',
                        'main.game.challenge']}
@@ -22,7 +32,8 @@ const GameScreen = ({ ...props }) => (
                     <React.Fragment>
                       <ResponseList data={extstate.previousResponses} />
                       <EventButton event={{type: 'INPUT', input: { noTreats: true}}}>
-                        I see no threats
+                        I see no { extstate.previousResponses.length > 0 ? ' more ' : '' }
+                        threats
                       </EventButton>
                     </React.Fragment>              
                   )} />

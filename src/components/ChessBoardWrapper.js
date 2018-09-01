@@ -11,22 +11,25 @@ class ChessBoard extends React.Component {
     const $ = window.$;
     const ChessBoard = window.ChessBoard;
     this.$el = $(this.el);
-    this.board = ChessBoard(this.$el, {
+    const board = ChessBoard(this.$el, {
       draggable: true,
       orientation: state.playerSide === 'w' ? 'white' : 'black',
       position: state.game.fen(),
       onDrop: (source, target) => {
-        onChange(source, target);
+        if (onChange) {
+          onChange(source, target);
+        }        
       },
       onSnapEnd: () => {
-        this.board.position(state.game.fen());
+        board.position(state.game.fen());      
       }
    });
+   this.board = board;
   }
 
   componentWillUnmount() {
     if (this.board) {
-      this.board.destroy();
+      this.board.destroy();      
     }
   }
 

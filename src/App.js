@@ -64,13 +64,26 @@ class App extends Component {
                      />
                   )}
                />
-                
-              <GameMachine.State is="main.scoreScreen">
-                <ScoreScreen />
-              </GameMachine.State>
-              <GameMachine.State is="settingsScreen">
-                <SettingsScreen />
-              </GameMachine.State>
+
+              <GameMachine.State is="main.scoreScreen"
+                  render={({ extstate }) => (
+                    <ScoreScreen state={ extstate } />
+                  )}
+               />               
+
+              <GameMachine.State is="settingsScreen"
+                    render={({ extstate, transition }) => (
+                      <SettingsScreen 
+                        fen={extstate.fen}
+                        errors={extstate.settingsErrors}
+                        onChange={changes => transition({
+                          type: 'SETTINGS_CHANGED',
+                          input: changes
+                        })}
+                      />
+                    )} 
+              />
+               
             </main> 
             <footer>
               &copy;Footer 2018

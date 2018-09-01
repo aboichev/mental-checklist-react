@@ -1,6 +1,7 @@
 import { Machine } from 'xstate';
 import { createStatefulMachine } from '@avaragado/xstateful';
 import { createReactMachine } from '@avaragado/xstateful-react';
+import { isValidMove, validateSettings } from 'game/utils';
 
 import reducer from './actions';
 
@@ -55,7 +56,8 @@ const machine = Machine({
                 on: {
                   INPUT: {
                     challenge: {
-                      actions: ['validateMove', 'validateChallenge']
+                      cond: (extstate, event) => isValidMove(extstate.game, event),
+                      actions: ['finilizeTurn', 'validateChallenge']
                     }
                   }
                 }
@@ -78,8 +80,14 @@ const machine = Machine({
 
     settingsScreen: {
       on: {
-          CLOSE_SETTINGS: 'main.hist'
-      }              
+          CLOSE_SETTINGS: 'main.hist',
+          SETTINGS_CHANGED: {
+            settingsScreen: {
+              cond: (extstate, event) => validateSettings(event).valid,
+              actions: ['applySettingsChange']
+            }
+          }
+      }          
     }
   }
 });
@@ -90,7 +98,11 @@ const log = ({ state, extstate: xs }) => {
   );
 };
 
-const extstate = { playerSide: 'w'};
+const extstate = { 
+  playerSide: 'w',
+  previousResponses: [], 
+  //fen: '5k1B/n6p/p1B5/1p6/6Q1/7P/PP3P1P/R3K2R w KQ - 5 24'
+};
 
 export const xsf = createStatefulMachine({ machine, reducer, extstate });
 xsf.on('change', log);

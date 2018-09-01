@@ -6,7 +6,7 @@ const actions = Reducer.map({
  
   initGame: ({ extstate: xs }) => {
     console.log('in initGame action', xs.playerSide);
-    const game = init(xs.playerSide);
+    const game = init(xs.playerSide, xs.fen);
     return Reducer.update({ game });
   },
 
@@ -37,24 +37,23 @@ const actions = Reducer.map({
 
     return Reducer.update({ previousResponses });
   },
-  
-  validateMove: ({ extstate: xs, event }) => {
+
+  finilizeTurn: ({ extstate: xs, event }) => {
     console.log('in validateMove action');
     const game = xs.game;
 
-    const validMove = game.move({
+    // apply player's move
+    game.move({
       from: event.input.from,
       to: event.input.to,
       promotion: 'q' // NOTE: always promote to a queen for example simplicity
     });
+    // calculate and apply computer's move
+    makeRandomMove(xs.game, xs.playerSide);
 
-    if (validMove) {
-      makeRandomMove(xs.game, xs.playerSide);
-    }
-
-    return Reducer.update({ game });
+    return Reducer.update({ game, fen: game.fen() });
   },
-  
+    
 });
 
 export default actions;

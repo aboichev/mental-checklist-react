@@ -1,21 +1,28 @@
 import React from 'react'
-import styled from 'styled-components'
-import Message from 'components/ui/Message'
+import ChessBoardWrapper from 'components/ChessBoardWrapper'
+import InfoPanel from 'components/ui/InfoPanel'
 import EventButton from 'components/ui/EventButton'
 
-// Create a Title component that'll render an <h1> tag with some styles
-const ScoreScreenPanel = styled.section`
-  font-size: 1em;
-  text-align: center;
-  padding: 20px;
-  margin: 0;
-`;
 
-const ScoreScreen = ({ color }) => (
-  <ScoreScreenPanel>
-    <Message color="green" />
-    <EventButton event="START_OVER" bg="yellow">Start Over</EventButton>
-  </ScoreScreenPanel>
+const makeRandomScore = (min, max) => {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+const ScoreScreen = ({ color, ...props }) => (
+  <React.Fragment>
+    <ChessBoardWrapper width='400px' {...props} />
+    <InfoPanel>
+      <h2>Game Over</h2>
+      <p>
+        Your score is: <strong>{makeRandomScore(500, 2000)}</strong>
+      </p>
+      <p>
+        <EventButton event="START_OVER">Start Over</EventButton>
+      </p>      
+    </InfoPanel>
+  </React.Fragment>
 );
 
 export default ScoreScreen;

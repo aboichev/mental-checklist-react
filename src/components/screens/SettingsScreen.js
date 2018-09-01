@@ -12,16 +12,26 @@ const SettingsPanel = styled.section`
   div {
     padding: 10px;
   }
+  input {
+    width: 70%
+  }
 `;
 
-const SettingsScreen = ({ color }) => (
+const SettingsScreen = ({ color, ...props }) => (
       <SettingsPanel>
           <h1>Settings</h1>
           <div>
             <label htmlFor="fenStr">Paste FEN here:</label>
           </div>
           <div>            
-            <input type="text" id="fenStr"></input>
+            <input type="text" id="fenStr" defaultValue={props.fen}
+               onChange={(e) => {
+                 if (props.onChange) {
+                  props.onChange({
+                    fen: e.target.value
+                  });
+                 }
+               }} />
           </div>
           <div>
            <EventButton event='CLOSE_SETTINGS'>OK</EventButton>
