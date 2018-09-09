@@ -6,7 +6,12 @@ const actions = Reducer.map({
  
   initGame: ({ extstate: xs }) => {
     console.log('in initGame action', xs.playerSide);
-    const game = init(xs.playerSide, xs.fen);
+    const game = init(xs.playerSide, xs.startingPosition);
+
+    if (game.turn() !== xs.playerSide) {
+      makeRandomMove(game);
+    }
+
     return Reducer.update({ game });
   },
 
@@ -16,7 +21,15 @@ const actions = Reducer.map({
     return Reducer.update({ playerSide });
   },
 
-  validateChallenge: ({ extstate: xs, event, transition }) => {
+  applySettingsChange: ({ event }) => {
+    const defaultPlayerSide = event.input.defaultPlayerSide;
+    const playerSide = defaultPlayerSide;
+    const startingPosition = event.input.startingPosition;
+    console.log("in applySettingsChange action", defaultPlayerSide, startingPosition);
+    return Reducer.update({ playerSide, defaultPlayerSide, startingPosition });
+  },
+
+  validateChallenge: ({ extstate: xs, event }) => {
     const game = xs.game;
     console.log('in validate action', xs, game);
     
@@ -39,7 +52,7 @@ const actions = Reducer.map({
   },
 
   finilizeTurn: ({ extstate: xs, event }) => {
-    console.log('in validateMove action');
+    console.log('in finilizeTurn action');
     const game = xs.game;
 
     // apply player's move
@@ -48,8 +61,10 @@ const actions = Reducer.map({
       to: event.input.to,
       promotion: 'q' // NOTE: always promote to a queen for example simplicity
     });
-    // calculate and apply computer's move
-    makeRandomMove(xs.game, xs.playerSide);
+
+    if (game.turn() !== xs.playerSide) {
+      makeRandomMove(game);
+    }
 
     return Reducer.update({ game, fen: game.fen() });
   },

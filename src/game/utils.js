@@ -9,11 +9,6 @@ const init = (playerSide, fen = null) => {
   if (playerSide !== 'w' && playerSide !== 'b') {
     throw new Error("invalid player's side argument");
   }
-
-  if (game.turn() !== playerSide) {
-    makeRandomMove(game);
-  }
-
   return game;
 };
 
@@ -61,8 +56,12 @@ const isValidMove = (game, event) => {
 
 const validateSettings = (event) => {
   const tempGame = new Chess();
-  console.log('event', event);
-  return tempGame.validate_fen(event.input.fen);
+  console.log('validateSettings', event);
+
+  const validateDefaultPlayerSide = (event.input.defaultPlayerSide === 'w' || event.input.defaultPlayerSide === 'b');
+  const validateStartingPosition = tempGame.validate_fen(event.input.startingPosition);
+
+  return validateDefaultPlayerSide && validateStartingPosition;
 };
 
 const matchMove = (input) => x => 

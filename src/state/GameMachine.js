@@ -32,7 +32,9 @@ const machine = Machine({
                 START_OVER: 'startScreen',
                 GAME_OVER: 'scoreScreen'
             },
+
             states: {
+              
               firstMove: {
                 on: {
                   INPUT: {
@@ -42,6 +44,7 @@ const machine = Machine({
                   }
                 }
               },
+
               challenge: {
                 on: {
                   INPUT: {
@@ -52,6 +55,7 @@ const machine = Machine({
                   CONTINUE: 'move'
                 }
               },
+
               move: {
                 on: {
                   INPUT: {
@@ -83,8 +87,8 @@ const machine = Machine({
           CLOSE_SETTINGS: 'main.hist',
           SETTINGS_CHANGED: {
             settingsScreen: {
-              cond: (extstate, event) => validateSettings(event).valid,
-              actions: ['applySettingsChange']
+              cond: (transition, event) => validateSettings(event).valid,
+              actions: ['applySettingsChange', 'initGame']
             }
           }
       }          
@@ -100,8 +104,10 @@ const log = ({ state, extstate: xs }) => {
 
 const extstate = { 
   playerSide: 'w',
-  previousResponses: [], 
-  //fen: '5k1B/n6p/p1B5/1p6/6Q1/7P/PP3P1P/R3K2R w KQ - 5 24'
+  defaultPlayerSide: 'w',
+  startingPosition: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+  previousResponses: [],
+  isFirstMove: true
 };
 
 export const xsf = createStatefulMachine({ machine, reducer, extstate });

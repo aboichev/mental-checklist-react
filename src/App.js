@@ -43,12 +43,11 @@ class App extends Component {
                 <SettingsButton event='OPEN_SETTINGS'>&#9881; Options</SettingsButton>
               </GameMachine.State>
             </header>
-            <main>              
-              <GameMachine.State is="main.startScreen"
-                render={({ extstate }) => (
-                  <StartScreen playerSide={ extstate.playerSide } />
-                )}
-              />               
+            <main>
+              
+            <GameMachine.State is="main.startScreen">
+              <StartScreen />
+            </GameMachine.State>
              
               <GameMachine.State is="main.game"
                   render={({ extstate, transition }) => (
@@ -69,12 +68,13 @@ class App extends Component {
                   render={({ extstate }) => (
                     <ScoreScreen state={ extstate } />
                   )}
-               />               
+               />             
 
               <GameMachine.State is="settingsScreen"
                     render={({ extstate, transition }) => (
                       <SettingsScreen 
-                        fen={extstate.fen}
+                        startingPosition={extstate.startingPosition}
+                        defaultPlayerSide={extstate.defaultPlayerSide}
                         errors={extstate.settingsErrors}
                         onChange={changes => transition({
                           type: 'SETTINGS_CHANGED',

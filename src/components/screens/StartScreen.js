@@ -17,16 +17,25 @@ const StartScreenPanel = styled.section`
   }
 `;
 
-const StartScreen = ({ color, ...props }) => (
-    <GameMachine.State is='main.startScreen'>
-      <StartScreenPanel>
-        <WelcomeMessage />
-        <SideSelect {...props} />
-        <div>
-          <EventButton event="START_GAME" bg="green">Let' Start</EventButton>
-        </div>
-      </StartScreenPanel>
-    </GameMachine.State>
+const StartScreen = () => (
+    <GameMachine.State is="main.startScreen"
+      render={({ extstate, transition }) =>  {
+        console.log('defaultPlayerSide', extstate.defaultPlayerSide);
+        return (
+          <StartScreenPanel>
+            <WelcomeMessage />
+            <label> I want to play: 
+              <SideSelect playerSide={ extstate.defaultPlayerSide } onChange={(newVal) => {
+                transition({type: 'PLAYER_SWITCHES_SIDE', playerSide: newVal });
+              }}/>
+            </label>
+            <div>
+              <EventButton event="START_GAME" bg="green">Let' Start</EventButton>
+            </div>
+         </StartScreenPanel>
+        );
+      }}
+    /> 
 );
 
 export default StartScreen;

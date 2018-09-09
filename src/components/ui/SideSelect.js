@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components';
-import GameMachine from 'state/GameMachine'
 
 const Select = styled('select')`
     margin: 10px;
@@ -10,29 +9,24 @@ const Select = styled('select')`
 class SideSelect extends React.Component {
     constructor(props) {
       super(props);
-      const { playerSide } = this.props;
-      this.state = {value: playerSide };  
+      const { playerSide, onChange } = this.props;
+      this.state = {value: playerSide };
+      this.onChange = onChange;
       this.handleChange = this.handleChange.bind(this); 
     }
   
-    handleChange(event, transition) {
+    handleChange(event) {
       this.setState({value: event.target.value});
-      transition({type: 'PLAYER_SWITCHES_SIDE', playerSide: event.target.value});
+      console.log('event.target.value', event.target.value);
+      this.onChange(event.target.value);
     }
 
     render() {
-      return (
-            <GameMachine
-                render={({ transition }) => (
-                    <label>
-                        I want to play:
-                        <Select value={this.state.value} onChange={(e) => this.handleChange(e, transition)}>
-                            <option value="w">White</option>
-                            <option value="b">Black</option>
-                        </Select>
-                    </label>
-                )}
-            />          
+      return (      
+        <Select value={this.state.value} onChange={(e) => this.handleChange(e)}>
+            <option value="w">White</option>
+            <option value="b">Black</option>
+        </Select>         
       );
     }
   }
