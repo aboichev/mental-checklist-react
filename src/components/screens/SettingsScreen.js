@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import EventButton from 'components/ui/EventButton'
 import SideSelect from 'components/ui/SideSelect'
+import StrategySelect from 'components/ui/StrategySelect'
 
 // Create a Title component that'll render an <h1> tag with some styles
 const SettingsPanel = styled.section`
@@ -25,7 +26,8 @@ class SettingsScreen extends React.Component {
 
     this.state = { 
       defaultPlayerSide: props.defaultPlayerSide,
-      startingPosition: props.startingPosition
+      startingPosition: props.startingPosition,
+      strategyName: props.strategyName
     };
 
     this.onChange = props.onChange;
@@ -41,13 +43,19 @@ class SettingsScreen extends React.Component {
       <SettingsPanel>
         <h1>Settings</h1>
         <div><label htmlFor="sideSelect">I like to start my games as: </label>
-            <SideSelect id="sideSelect" playerSide={ this.state.defaultPlayerSide } onChange={ (selectedValue) => this.handleChange({ defaultPlayerSide: selectedValue }) } />
+          <SideSelect id="sideSelect" playerSide={ this.state.defaultPlayerSide } onChange={ (selectedValue) => this.handleChange({ defaultPlayerSide: selectedValue }) } />
         </div>
         <div>
           <label htmlFor="fenStr">Starting position (FEN):</label>
         </div>
         <div>     
           <input type="text" id="fenStr" defaultValue={this.state.startingPosition} onChange={ (e) => this.handleChange({ startingPosition: e.target.value }) } />
+        </div>
+        <div>
+          <label htmlFor="strategySelect">Computer Opponent Difficulty:</label>
+        </div>
+        <div>     
+          <StrategySelect id="strategySelect" strategyName={ this.state.strategyName } onChange={ (selectedValue) => this.handleChange({ strategyName: selectedValue }) } />
         </div>
         <div>
           <EventButton event='CLOSE_SETTINGS'>OK</EventButton>

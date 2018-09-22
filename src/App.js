@@ -75,6 +75,7 @@ class App extends Component {
                       <SettingsScreen 
                         startingPosition={extstate.startingPosition}
                         defaultPlayerSide={extstate.defaultPlayerSide}
+                        strategyName={extstate.strategyName}
                         errors={extstate.settingsErrors}
                         onChange={changes => transition({
                           type: 'SETTINGS_CHANGED',

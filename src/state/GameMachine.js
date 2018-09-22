@@ -87,7 +87,7 @@ const machine = Machine({
           CLOSE_SETTINGS: 'main.hist',
           SETTINGS_CHANGED: {
             settingsScreen: {
-              cond: (transition, event) => validateSettings(event).valid,
+              cond: (transition, event) => validateSettings(event),
               actions: ['applySettingsChange', 'initGame']
             }
           }
@@ -106,6 +106,7 @@ const extstate = {
   playerSide: 'r',
   defaultPlayerSide: 'r',
   startingPosition: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+  strategyName: 'dumb',
   previousResponses: [],
   isFirstMove: true
 };

@@ -1,4 +1,5 @@
 import Chess from 'chess.js'
+import { computerMovesStrategies, getOpponentsThreats } from './strategies'
 
 const init = (playerSide, fen = null) => {
 
@@ -12,31 +13,31 @@ const init = (playerSide, fen = null) => {
   return game;
 };
 
-const makeRandomMove = (game, playerSide) => {
-  if (!isGameOver(game) && game.turn() === playerSide) {
+const isGameOver = (game) =>  {
+  return game.game_over() === true || game.moves().length === 0;
+};
+
+const getOpponentMove = (game, playerSide, strategyName) => {
+  if (isGameOver(game) || game.turn() === playerSide) {
     return;
   }
 
-  var possibleMoves = game.moves();
-  const randomIndex = Math.floor(Math.random() * possibleMoves.length);
-  game.move(possibleMoves[randomIndex]);
+  const coord = computerMovesStrategies[strategyName](game);
+
+  game.move(coord);
 }
 
-const validateCaptures = (game, input, previousResponses = []) => {
-  const captures = getCaptures(game);
-  console.log('treats', captures);
-  console.log('previous responses', previousResponses);
+const validateThreats = (game, input, previousResponses = []) => {
+  const treats = getOpponentsThreats(game);
 
-  if (input.noTreats && captures.length === previousResponses.length) {
+  if (input.noTreats && treats.length === previousResponses.length) {
     return true;
   }
   
   const notSameAsBefore = previousResponses.find(matchMove(input)) === undefined;
-  const foundCapture    = captures.find(matchMove(input));
+  const foundCapture    = treats.find(matchMove(input));
 
-  console.log('is valid?', notSameAsBefore, foundCapture);
   if (notSameAsBefore && foundCapture) {
-    console.log('adding to previous responses', notSameAsBefore, foundCapture);
     input.san = foundCapture.san;
     previousResponses.push(input);
   }
@@ -58,46 +59,23 @@ const validateSettings = (event) => {
   const tempGame = new Chess();
   console.log('validateSettings', event);
 
-  const validateDefaultPlayerSide = (event.input.defaultPlayerSide === 'w' || event.input.defaultPlayerSide === 'b');
-  const validateStartingPosition = tempGame.validate_fen(event.input.startingPosition);
+  const validateDefaultPlayerSide = (event.input.defaultPlayerSide === 'w' || event.input.defaultPlayerSide === 'b' || event.input.defaultPlayerSide === 'r');
+  const validateStartingPosition = tempGame.validate_fen(event.input.startingPosition).valid;
+  const validateStrategyName = Object.keys(computerMovesStrategies).indexOf(event.input.strategyName) >= 0; 
 
-  return validateDefaultPlayerSide && validateStartingPosition;
+  const result = validateDefaultPlayerSide && validateStartingPosition && validateStrategyName;
+  console.log('result', result);
+  return result;
 };
 
-const matchMove = (input) => x => 
-        input.from === x.from && input.to === x.to;
+const matchMove = (input) => x => input.from === x.from && input.to === x.to;
 
-const getCaptures = (game) => {
-  const fenArr = game.fen().split(' ');
-  console.log(game.fen());
-  fenArr[1] = fenArr[1] === 'w' ? 'b' : 'w';
-  // remove en-passant square
-  fenArr[3] = '-';
-  const fen = fenArr.join(' ');
-  const tempGame = new Chess();
-  const validation = tempGame.validate_fen(fen);
-  if (!validation.valid) {
-    throw new Error(validation.error);
-  }
-
-  tempGame.load(fen);
-
-  const moves = tempGame
-      .moves({verbose: true});
-
-      const captures = moves.filter(x => x.flags === 'c' || x.flags === 'pc');
-
-  return captures;
-};
-
-const isGameOver = (game) =>  {
-  return game.game_over() === true || game.moves().length === 0;
-};
-
-export { init,
-  makeRandomMove, 
-  validateCaptures,
+export { 
+  init,
+  getOpponentMove, 
+  validateThreats,
   isGameOver,
   isValidMove,
-  validateSettings
+  validateSettings,
+  computerMovesStrategies
 };

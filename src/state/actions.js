@@ -1,5 +1,5 @@
 import { Reducer } from '@avaragado/xstateful';
-import { init, makeRandomMove, validateCaptures } from 'game/utils';
+import { init, getOpponentMove, validateThreats } from 'game/utils';
 import { isGameOver } from '../game/utils';
 
 const actions = Reducer.map({  
@@ -17,7 +17,7 @@ const actions = Reducer.map({
     const game = init(xs.playerSide, xs.startingPosition);
 
     if (game.turn() !== xs.playerSide) {
-      makeRandomMove(game);
+      getOpponentMove(game, xs.playerSide,  xs.strategyName);
     }
 
     return Reducer.update({ game });
@@ -32,9 +32,11 @@ const actions = Reducer.map({
   applySettingsChange: ({ event }) => {
     const defaultPlayerSide = event.input.defaultPlayerSide;
     const playerSide = defaultPlayerSide;
+    const strategyName = event.input.strategyName;
+
     const startingPosition = event.input.startingPosition;
-    console.log("in applySettingsChange action", defaultPlayerSide, startingPosition);
-    return Reducer.update({ playerSide, defaultPlayerSide, startingPosition });
+    console.log("in applySettingsChange action", defaultPlayerSide, startingPosition, strategyName);
+    return Reducer.update({ defaultPlayerSide, playerSide, strategyName, startingPosition });
   },
 
   validateChallenge: ({ extstate: xs, event }) => {
@@ -50,7 +52,7 @@ const actions = Reducer.map({
     let previousResponses = xs.previousResponses || [];
 
     console.log('event', input, previousResponses);
-    if (validateCaptures(game, input, previousResponses)) {
+    if (validateThreats(game, input, previousResponses)) {
       previousResponses = [];
       return Reducer.updateWithEffect({ previousResponses }, xsf => xsf.transition('CONTINUE'));
     }
@@ -60,7 +62,7 @@ const actions = Reducer.map({
   },
 
   finilizeTurn: ({ extstate: xs, event }) => {
-    console.log('in finilizeTurn action');
+    console.log('in finilizeTurn action', xs.strategyName);
     const game = xs.game;
 
     // apply player's move
@@ -71,7 +73,7 @@ const actions = Reducer.map({
     });
 
     if (game.turn() !== xs.playerSide) {
-      makeRandomMove(game);
+      getOpponentMove(game, xs.playerSide, xs.strategyName);
     }
 
     return Reducer.update({ game, fen: game.fen() });
