@@ -24,6 +24,7 @@ class SideSelect extends React.Component {
     render() {
       return (      
         <Select value={this.state.value} onChange={(e) => this.handleChange(e)}>
+            <option value="r">Random</option>
             <option value="w">White</option>
             <option value="b">Black</option>
         </Select>         

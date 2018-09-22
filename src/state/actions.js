@@ -6,6 +6,14 @@ const actions = Reducer.map({
  
   initGame: ({ extstate: xs }) => {
     console.log('in initGame action', xs.playerSide);
+
+    if (xs.defaultPlayerSide === 'r') {      
+       xs.playerSide = Math.random() >= 0.5 ? 'w': 'b';
+    }
+    else {
+      xs.playerSide = xs.defaultPlayerSide;
+    }
+
     const game = init(xs.playerSide, xs.startingPosition);
 
     if (game.turn() !== xs.playerSide) {

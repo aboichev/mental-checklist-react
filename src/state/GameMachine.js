@@ -103,8 +103,8 @@ const log = ({ state, extstate: xs }) => {
 };
 
 const extstate = { 
-  playerSide: 'w',
-  defaultPlayerSide: 'w',
+  playerSide: 'r',
+  defaultPlayerSide: 'r',
   startingPosition: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
   previousResponses: [],
   isFirstMove: true

@@ -6,7 +6,7 @@ const init = (playerSide, fen = null) => {
   if (game == null) {
     throw new Error('invalid game');
   }
-  if (playerSide !== 'w' && playerSide !== 'b') {
+  if (playerSide !== 'w' && playerSide !== 'b' && playerSide !== 'r') {
     throw new Error("invalid player's side argument");
   }
   return game;
