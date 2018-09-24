@@ -1,5 +1,7 @@
-import Chess from 'chess.js'
-import { computerMovesStrategies, getOpponentsThreats } from './strategies'
+import Chess from 'game/Chess'
+import getOpponentsThreats from './getOpponentsThreats'
+import computerMovesStrategies from './strategies'
+
 
 const init = (playerSide, fen = null) => {
 

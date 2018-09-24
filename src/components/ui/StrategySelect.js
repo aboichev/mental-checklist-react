@@ -29,6 +29,7 @@ class StrategySelect extends React.Component {
         <Select value={this.state.value} onChange={(e) => this.handleChange(e)}>
             <option value="random">Random (easiest)</option>
             <option value="dumb">Dumb (will take any piece)</option>
+            <option value="easy">Easy</option>
         </Select>         
       );
     }

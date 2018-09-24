@@ -106,7 +106,7 @@ const extstate = {
   playerSide: 'r',
   defaultPlayerSide: 'r',
   startingPosition: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
-  strategyName: 'dumb',
+  strategyName: 'easy',
   previousResponses: [],
   isFirstMove: true
 };

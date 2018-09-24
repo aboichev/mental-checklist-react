@@ -1,44 +1,47 @@
-import Chess from 'chess.js'
+import evaluateBoard from './evaluateBoard'
+import getBestMove from './minimax'
 
-const getCaptures = (moves) => moves.filter(x => x.flags === 'c' || x.flags === 'pc');
-
-const getOpponentsThreats = (game) => {
-  const fenArr = game.fen().split(' ');
-  fenArr[1] = fenArr[1] === 'w' ? 'b' : 'w';
-  // remove en-passant square
-  fenArr[3] = '-';
-  const fen = fenArr.join(' ');
-  const tempGame = new Chess();
-  const validation = tempGame.validate_fen(fen);
-  if (!validation.valid) {
-    throw new Error(validation.error);
-  }
-
-  tempGame.load(fen);
-
-  const moves    = tempGame.moves({verbose: true});
-  const captures = getCaptures(moves);
-
-  return captures;
-};
+const catpuresOnly = x => x.flags === 'c' || x.flags === 'pc';
 
 const computerMovesStrategies = {
+
     random: (game) => {
       var possibleMoves = game.moves();
       const randomIndex = Math.floor(Math.random() * possibleMoves.length);
       return possibleMoves[randomIndex];
     },
+
     dumb: (game) => {
-      var possibleMoves = game.moves({verbose: true});
-      var captures = getCaptures(possibleMoves);
+      const possibleMoves = game.moves({verbose: true});
+      const captures = possibleMoves.filter(catpuresOnly);
+
       if (captures.length === 0) {
         return computerMovesStrategies.random(game);
       }
-      return captures[0];
-    }
-  };
 
-  export {
-      computerMovesStrategies,
-      getOpponentsThreats
-  }
+      const isBlack = game.turn() === 'b';
+      let bestMove  = null;
+      let bestValue = -9999;
+  
+      for (var i = 0; i < captures.length; i++) {
+          var captureMove = captures[i];
+          game.move(captureMove);
+          var gameValue = evaluateBoard(game.board());
+          var boardValue = isBlack ? -gameValue : gameValue;
+          game.undo();
+  
+          if (boardValue > bestValue) {
+            bestValue = boardValue;
+            bestMove = captureMove;
+          }
+      }
+
+      return bestMove;
+    },
+
+    easy: (game) => {
+      return getBestMove(2, game);
+    }
+ };
+
+ export default computerMovesStrategies;
