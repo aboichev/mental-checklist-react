@@ -20,12 +20,13 @@ jobs:
           - v1-dependencies-{{ checksum "package.json" }}
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
+      - run: npm install
+
       - run:
           name: Make .env file
           command: |
             echo "NODE_PATH=./src/" > ~/wd/.env 
 
-      - run: npm install
 
       - save_cache:
           paths:
@@ -57,7 +58,7 @@ jobs:
       - run:
           name: Deploy latest static artifacts in ./build to live bucket
           command: |
-            gsutil rsync -d -r build "gs://www.mental-checklist.com"
+            gsutil rsync -d -r ~/wd/build "gs://www.mental-checklist.com"
     
 workflows:
   version: 2
