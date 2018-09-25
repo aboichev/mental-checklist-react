@@ -11,8 +11,8 @@ jobs:
     working_directory: ~/wd
 
     steps:
-      - checkout
-        path: ~/wd
+      - checkout:
+          path: ~/wd
 
       # Download and cache dependencies
       - restore_cache:
