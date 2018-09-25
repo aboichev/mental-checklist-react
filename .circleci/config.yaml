@@ -8,13 +8,7 @@ jobs:
     docker:
       # specify the version you desire here
       - image: circleci/node:10
-      
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/mongo:3.4.4
-
-    working_directory: ~/repo
+    working_directory: ~/wd
 
     steps:
       - checkout
@@ -26,7 +20,7 @@ jobs:
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
 
-      - run: yarn install
+      - run: npm install
 
       - save_cache:
           paths:
@@ -35,13 +29,17 @@ jobs:
         
       # build
       - run: npm run build
+      - persist_to_workspace:
+          root: ~/wd
+          path:
+            - build/
 
   publish_artifacts: 
     docker:
     - image: google/cloud-sdk
     steps:
       - attach_workspace:
-          at: ~/
+          at: ~/wd
       - run:
           name: Store Service Account JSON (CircleCI env variable to file)
           command: |
