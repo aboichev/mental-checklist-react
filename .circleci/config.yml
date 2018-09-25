@@ -34,10 +34,10 @@ jobs:
         
       # build
       - run: npm run build
-#      - persist_to_workspace:
-#          root: /home/circleci/wd
-#          path:
-#            - build/
+      - persist_to_workspace:
+          root: /home/circleci/wd
+          paths:
+            - build/
 
   publish_artifacts: 
     docker:
