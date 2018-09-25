@@ -12,6 +12,7 @@ jobs:
 
     steps:
       - checkout
+        path: ~/wd
 
       # Download and cache dependencies
       - restore_cache:
