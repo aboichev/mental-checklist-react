@@ -62,3 +62,6 @@ workflows:
       - publish_artifacts:
           requires:
             - build
+            filters:
+              branches:
+                only: master
