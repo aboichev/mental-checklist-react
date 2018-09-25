@@ -34,7 +34,7 @@ jobs:
       # build
       - run: npm run build
       - persist_to_workspace:
-          root: ~/wd
+          root: /home/circleci/wd
           path:
             - build/
 
