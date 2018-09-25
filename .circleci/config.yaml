@@ -1,0 +1,66 @@
+# Javascript Node CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-javascript/ for more details
+#
+version: 2
+jobs:
+  build:
+    docker:
+      # specify the version you desire here
+      - image: circleci/node:10
+      
+      # Specify service dependencies here if necessary
+      # CircleCI maintains a library of pre-built images
+      # documented at https://circleci.com/docs/2.0/circleci-images/
+      # - image: circleci/mongo:3.4.4
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+
+      - run: yarn install
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+        
+      # build
+      - run: npm run build
+
+  publish_artifacts: 
+    docker:
+    - image: google/cloud-sdk
+    steps:
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: Store Service Account JSON (CircleCI env variable to file)
+          command: |
+            echo $GCLOUD_SERVICE_ACCOUNT > ${HOME}/gcloud-service-key.json
+      - run:
+          name: Authenticate with Google
+          command: |
+            gcloud auth activate-service-account --key-file=${HOME}/gcloud-service-key.json
+            gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
+      - run:
+          name: Deploy latest static artifacts in ./build to live bucket
+          command: |
+            gsutil rsync -d -r build "gs://www.mental-checklist.com"
+    
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build:
+      - publish_artifacts:
+          requires:
+            - build
