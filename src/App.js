@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { injectGlobal } from 'styled-components'
 
 import GameMachine from 'state/GameMachine';
 
