@@ -10,33 +10,33 @@ import ResponseList from 'components/ui/ResponseList'
 
 const GameScreen = ({ ...props }) => (
   <React.Fragment>
-    <ChessBoardWrapper width='400px' {...props} />
+    <ChessBoardWrapper id="board" {...props} />
     <InfoPanel>
       <GameMachine.State
           is="main"
           render={({ extstate }) => (
             <React.Fragment>
-              <GameMachine.State is="main.game.firstMove">
-                <FirstMoveMessage width='400px' />
-              </GameMachine.State>
-              <GameMachine.State is="main.game.challenge">
-                <ChallengeMessage width='400px' />
-              </GameMachine.State>
-              <GameMachine.State is="main.game.move">
-                <MoveMessage width='400px' />
-              </GameMachine.State>              
               <GameMachine.State 
                   is={['main.game.firstMove',
                        'main.game.challenge']}
                   render={(state) => (
                     <React.Fragment>
-                      <ResponseList data={extstate.previousResponses} />
                       <EventButton event={{type: 'INPUT', input: { noTreats: true}}}>
                         I see no { extstate.previousResponses.length > 0 ? ' more ' : '' }
                         threats
                       </EventButton>
+                      <ResponseList data={extstate.previousResponses} />
                     </React.Fragment>              
                   )} />
+              <GameMachine.State is="main.game.firstMove">
+                <FirstMoveMessage />
+              </GameMachine.State>
+              <GameMachine.State is="main.game.challenge">
+                <ChallengeMessage />
+              </GameMachine.State>
+              <GameMachine.State is="main.game.move">
+                <MoveMessage />
+              </GameMachine.State>              
             </React.Fragment>
           )}
       />   

@@ -34,7 +34,7 @@ class ChessBoard extends React.Component {
   }
 
   render() {
-    return <div ref={el => this.el = el} style={{width: this.props.width || '400px'}} />;
+    return <div id="board" ref={el => this.el = el} />;
   }
 }
 const ChessBoardWrapper = styled(ChessBoard)`

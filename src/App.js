@@ -10,27 +10,6 @@ import GameScreen from 'components/screens/GameScreen'
 import ScoreScreen from 'components/screens/ScoreScreen'
 import SettingsScreen from 'components/screens/SettingsScreen'
 
-injectGlobal`
-  header, main, footer {
-    padding: 3px 10px 3px 10px;
-    color: #333;
-  }
-  header {
-    background-color: #f0d9b5;  
-  }
-  header > button {
-    float: right;
-  }
-  main {
-    background-color: #f0d9b566;
-  }
-  footer {   
-    text-align: center;  
-    background-color: #b58863;
-    color: #DECCCC
-  }
-`
-
 class App extends Component {
   
   render() {
@@ -40,6 +19,7 @@ class App extends Component {
           <Layout>
             <header>
               <GameMachine.State is="main">
+                <h1>Mental Checklist</h1>
                 <SettingsButton event='OPEN_SETTINGS'>&#9881; Options</SettingsButton>
               </GameMachine.State>
             </header>
@@ -85,10 +65,7 @@ class App extends Component {
                     )} 
               />
                
-            </main> 
-            <footer>
-              &copy;Footer 2018
-            </footer>
+            </main>
           </Layout>
         </GameMachine.Control>
       </GameMachine.Provider>
