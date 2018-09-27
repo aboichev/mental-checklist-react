@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import defaults from './defaults'
 
 const StyledDiv = styled('div')`
-    font-size: 1em;
     color: ${props => props.color};
 `;
 

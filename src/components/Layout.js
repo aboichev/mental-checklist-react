@@ -1,22 +1,26 @@
 import styled, { injectGlobal } from 'styled-components';
 
 injectGlobal`
-  html, body, #root {
-    margin: 0;    
+  html, body  {
+    margin: 0;
+    padding: 0;
+  }
+  body {
+    background-color: #f0d9b566;
+    overscroll-behavior: contain;
   }
   @media screen and (orientation: landscape) {
     #board { 
-      width: 48vw;
-      height: 48;
+      width: 90vh;
+      height: 90vh;
       float: left;
     }
   }
   @media screen and (orientation: portrait) {
       #board { 
-        width: 100vw;
-        height: 100vw;
-        margin:0;
-        padding:0;
+        width: 94vw;
+        height: 94vw;
+        margin: auto;
       }
   }
 `
@@ -27,15 +31,13 @@ const Layout = styled.div`
     font-size: 1.6em;
     margin: 0;
     color: #b58863;
+    padding: 6px;
   }
   header {
     background-color: #f0d9b5;  
   }
   header > button {
     float: right;
-  }
-  main {
-    background-color: #f0d9b566;
   }
 `
 
