@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Mental Checklist",
+  "name": "Mental Checklist for Chess",
   "icons": [
     {
       "src": "favicon.ico",

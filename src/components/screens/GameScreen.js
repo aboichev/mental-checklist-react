@@ -1,10 +1,10 @@
 import React from 'react'
 import GameMachine from 'state/GameMachine'
-import ChessBoardWrapper from 'components/ChessBoardWrapper'
+import ChessBoardWrapper from 'components/ui/chessboard/ChessBoardWrapper'
 import InfoPanel from 'components/ui/InfoPanel'
 import FirstMoveMessage from 'components/messages/FirstMoveMessage'
-import ChallengeMessage from 'components/messages/ChallengeMessage';
-import MoveMessage from 'components/messages/MoveMessage';
+import ChallengeMessage from 'components/messages/ChallengeMessage'
+import MoveMessage from 'components/messages/MoveMessage'
 import EventButton from 'components/ui/EventButton'
 import ResponseList from 'components/ui/ResponseList'
 

@@ -1,5 +1,5 @@
 import React from 'react'
-import ChessBoardWrapper from 'components/ChessBoardWrapper'
+import ChessBoardWrapper from 'components/ui/chessboard/ChessBoardWrapper'
 import InfoPanel from 'components/ui/InfoPanel'
 import EventButton from 'components/ui/EventButton'
 

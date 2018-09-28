@@ -5,6 +5,7 @@
   "dependencies": {
     "@avaragado/xstateful": "^0.5.0",
     "@avaragado/xstateful-react": "^0.6.0",
+    "jquery": "^3.3.1",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
     "react-scripts": "1.1.4",
@@ -12,7 +13,7 @@
     "xstate": "^3.3.3"
   },
   "scripts": {
-    "start": "PORT=5000 react-scripts start",
+    "start": "PORT=3000 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
