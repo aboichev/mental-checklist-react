@@ -1,19 +1,25 @@
 import evaluateBoard from './evaluateBoard'
 
-var minimax = (depth, game, isMaximisingPlayer) => {
+const minimax = (depth, game, alpha, beta, isMaximisingPlayer) => {
     if (depth === 0) {
         const isBlack = game.turn() === 'b';
-        const gameValue = evaluateBoard(game.board());
-        const playerValue = isBlack ? -gameValue : gameValue;
-        return playerValue;
+        const absValue = evaluateBoard(game.board());
+        const sideAdjustedValue = isBlack ? -absValue : absValue;
+        return sideAdjustedValue;
     }
+
     const newGameMoves = game.moves();
+
     if (isMaximisingPlayer) {
         let bestMove = -9999;
         for (let i = 0; i < newGameMoves.length; i++) {
             game.move(newGameMoves[i]);
-            bestMove = Math.max(bestMove, minimax(depth - 1, game, !isMaximisingPlayer));
+            bestMove = Math.max(bestMove, minimax(depth - 1, game, alpha, beta, !isMaximisingPlayer));
             game.undo();
+            alpha = Math.max(alpha, bestMove);
+            if (beta <= alpha) {
+                return bestMove;
+            }
         }
         return bestMove;
     }
@@ -23,6 +29,10 @@ var minimax = (depth, game, isMaximisingPlayer) => {
             game.move(newGameMoves[i]);
             bestMove = Math.min(bestMove, minimax(depth - 1, game, !isMaximisingPlayer));
             game.undo();
+            beta = Math.min(beta, bestMove);
+            if (beta <= alpha) {
+                return bestMove;
+            }
         }
         return bestMove;
     }
