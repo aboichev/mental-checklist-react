@@ -1,7 +1,20 @@
 import $ from 'jquery'
+
+const pieceSources = {
+  bB: require('./img/bB.png'),
+  bK: require('./img/bK.png'),
+  bN: require('./img/bN.png'),
+  bP: require('./img/bP.png'),
+  bQ: require('./img/bQ.png'),
+  bR: require('./img/bR.png'),
+  wB: require('./img/wB.png'),
+  wK: require('./img/wK.png'),
+  wN: require('./img/wN.png'), 
+  wP: require('./img/wP.png'), 
+  wQ: require('./img/wQ.png'), 
+  wR: require('./img/wR.png'),
+};
 /* eslint-disable */
-
-
 /*!
  * chessboard.js v0.3.0
  *
@@ -642,17 +655,7 @@ function buildBoard(orientation) {
 }
 
 function buildPieceImgSrc(piece) {
-  if (typeof cfg.pieceTheme === 'function') {
-    return cfg.pieceTheme(piece);
-  }
-
-  if (typeof cfg.pieceTheme === 'string') {
-    return cfg.pieceTheme.replace(/{piece}/g, piece);
-  }
-
-  // NOTE: this should never happen
-  error(8272, 'Unable to build image source for cfg.pieceTheme.');
-  return '';
+  return pieceSources[piece];
 }
 
 function buildPiece(piece, hidden, id) {
