@@ -26,6 +26,12 @@ class ChessBoardComponent extends React.Component {
       }
    });
    this.board = board;
+
+   window.onresize = () => { 
+     if (this.board) {
+       this.board.resize();
+     }
+    }
   }
 
   componentWillUnmount() {
