@@ -19,10 +19,13 @@ class ChessBoardComponent extends React.Component {
       draggable: true,
       orientation: state.playerSide === 'w' ? 'white' : 'black',
       position: state.game.fen(),
-      onSnapEnd: (source, target) => {
+      onDrop: (source, target) => {
+        setTimeout(() => onChange(source, target), 250);
+        //onChange(source, target);
+      },
+      onSnapEnd: () => {
         console.log('onSnapEnd');
-        onChange(source, target);
-        board.position(state.game.fen()); 
+        //board.position(state.game.fen()); 
       }
    });
    this.board = board;
@@ -41,6 +44,9 @@ class ChessBoardComponent extends React.Component {
   }
 
   render() {
+    if (this.board) {
+      this.board.position(this.props.state.game.fen());
+    }
     return <div id="board" ref={el => this.el = el} />;
   }
 }

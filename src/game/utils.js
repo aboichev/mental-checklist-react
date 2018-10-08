@@ -20,9 +20,8 @@ const isGameOver = (game) =>  {
 };
 
 const getOpponentMove = (game, playerSide, strategyName) => {
-  if (isGameOver(game) || game.turn() === playerSide) {
-    return;
-  }
+  
+
 
   const coord = computerMovesStrategies[strategyName](game);
 

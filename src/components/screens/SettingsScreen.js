@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import EventButton from 'components/ui/EventButton'
 import SideSelect from 'components/ui/SideSelect'
 import StrategySelect from 'components/ui/StrategySelect'
+import CONST from 'state/constants'
 
 // Create a Title component that'll render an <h1> tag with some styles
 const SettingsPanel = styled.section`
@@ -32,10 +33,16 @@ class SettingsScreen extends React.Component {
 
     this.onChange = props.onChange;
     this.handleChange = this.handleChange.bind(this); 
+    this.resetPosition = this.resetPosition.bind(this);
   }
 
   handleChange(update) {
     this.onChange(Object.assign(this.state, update));
+  }
+  
+  resetPosition() {
+    this.setState({ startingPosition: CONST.standardPosition });
+    this.handleChange({ startingPosition: CONST.standardPosition});
   }
 
   render() {
@@ -48,8 +55,11 @@ class SettingsScreen extends React.Component {
         <div>
           <label htmlFor="fenStr">Starting position (FEN):</label>
         </div>
-        <div>     
-          <input type="text" id="fenStr" defaultValue={this.state.startingPosition} onChange={ (e) => this.handleChange({ startingPosition: e.target.value }) } />
+        <div>
+          <button onClick={ this.resetPosition }>Reset</button>
+          <input type="text" id="fenStr" 
+            value={ this.state.startingPosition }
+            onChange={ (e) => this.handleChange({ startingPosition: e.target.value }) } />
         </div>
         <div>
           <label htmlFor="strategySelect">Computer Opponent Difficulty:</label>

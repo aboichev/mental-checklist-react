@@ -28,6 +28,9 @@ const GameScreen = ({ ...props }) => (
                       <ResponseList data={extstate.previousResponses} />
                     </React.Fragment>              
                   )} />
+              <GameMachine.Activity is="calculate">
+                   <div>Thinking...</div>
+              </GameMachine.Activity>
               <GameMachine.State is="main.game.firstMove">
                 <FirstMoveMessage />
               </GameMachine.State>

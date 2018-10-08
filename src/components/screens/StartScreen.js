@@ -13,7 +13,6 @@ const StartScreenPanel = styled.section`
 const StartScreen = () => (
     <GameMachine.State is="main.startScreen"
       render={({ extstate, transition }) =>  {
-        console.log('defaultPlayerSide', extstate.defaultPlayerSide);
         return (
           <StartScreenPanel>
             <WelcomeMessage />

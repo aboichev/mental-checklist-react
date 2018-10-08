@@ -2,85 +2,116 @@ import { Machine } from 'xstate';
 import { createStatefulMachine } from '@avaragado/xstateful';
 import { createReactMachine } from '@avaragado/xstateful-react';
 import { isValidMove, validateSettings } from 'game/utils';
+import CONST from 'state/constants';
 
 import reducer from './actions';
 
 const machine = Machine({
-    initial: 'main',
-    states: {
-      main: {
-        initial: 'startScreen',
-        on: {
-            OPEN_SETTINGS: 'settingsScreen'
+  initial: 'main',
+  states: {
+    main: {
+      initial: 'startScreen',
+      on: {
+          OPEN_SETTINGS: 'settingsScreen'
+      },
+      states: {
+        
+        startScreen: {
+          on: {
+              START_GAME: {
+                game: { actions: ['initGame'] }
+              },
+              PLAYER_SWITCHES_SIDE: {
+                startScreen: { actions: ['playerSwitchesSide'] }
+              }
+          }
         },
-        states: {
-          
-          startScreen: {
-            on: {
-                START_GAME: {
-                  game: { actions: ['initGame'] }
-                },
-                PLAYER_SWITCHES_SIDE: {
-                  startScreen: { actions: ['playerSwitchesSide'] }
-                }
-            }
+        
+        game: {
+          initial: 'challenge',
+          on: {
+              START_OVER: 'startScreen',
+              GAME_OVER: 'scoreScreen'
           },
-          
-          game: {
-            initial: 'firstMove',
-            on: {
-                START_OVER: 'startScreen',
-                GAME_OVER: 'scoreScreen'
-            },
 
-            states: {
-              
-              firstMove: {
-                on: {
-                  INPUT: {
-                    challenge: {
-                      actions: ['validateChallenge']
+          states: {
+            challenge: {
+              on: {
+                INPUT: {
+                  challenge: {
+                    actions:['isGameOver', 'validateChallenge']
+                  }
+                },
+                CONTINUE: 'move'
+              },
+              states: {             
+                present: {
+                  on: {
+                    INPUT: {
+                      challenge: {
+                        actions: ['validateChallenge']
+                      }
                     }
                   }
-                }
-              },
+                },
+                correct: {
+                  activities: [
+                    "show_positive_feedback",
+                    "feedbackDelay"
+                  ],
+                  on: {
+                    TIMEOUT: "present"
+                  }
+                },
+                wrong: {
+                  activities: [
+                    "show_negative_feedback",
+                    "feedbackDelay"
+                  ],
+                  on: {
+                    TIMEOUT: "present"
+                  }
+                },                                
+              }
+            },
 
-              challenge: {
-                on: {
-                  INPUT: {
-                    challenge: {
-                      actions:['validateChallenge']
-                    }
-                  },
-                  CONTINUE: 'move'
-                }
-              },
-
-              move: {
-                on: {
-                  INPUT: {
-                    challenge: {
-                      cond: (extstate, event) => isValidMove(extstate.game, event),
-                      actions: ['finilizeTurn', 'validateChallenge']
-                    }
+            move: {
+              on: {
+                INPUT: {
+                  opponent: {
+                    cond: (extstate, event) => isValidMove(extstate.game, event),
+                    actions: ['applyTurn', 'isGameOver']
                   }
                 }
               }
+            },
+
+            opponent: {
+              activities: ['calculate'],
+              on: {
+                CALCULATION_DONE: 'challenge' 
+              }
             }
+          }
+        },
+        
+        scoreScreen: {
+          on: {
+              START_OVER: {
+                startScreen: { actions: ['consoleLog'] }
+              }
           },
-          
-          scoreScreen: {
-            on: {
-                START_OVER: {
-                  startScreen: { actions: ['consoleLog'] }
-                }
-            }
-          },
-          
-          hist: { history: true }
-        }
-      },
-    
+
+          states: {
+            won: {},
+            lost: {},
+            draw: {}
+          }
+        },
+        
+        hist: { history: true }
+      }
+    },
 
     settingsScreen: {
       on: {
@@ -102,10 +133,10 @@ const log = ({ state, extstate: xs }) => {
   );
 };
 
-const extstate = { 
-  playerSide: 'r',
-  defaultPlayerSide: 'r',
-  startingPosition: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+const extstate = {
+  playerSide: localStorage.defaultPlayerSide || 'r',
+  defaultPlayerSide: localStorage.defaultPlayerSide || 'r',
+  startingPosition: localStorage.startingPosition || CONST.standardPosition,
   strategyName: 'easy',
   previousResponses: [],
   isFirstMove: true
