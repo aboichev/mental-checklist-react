@@ -44,7 +44,7 @@ const GameScreen = ({ ...props }) => (
             </React.Fragment>
           )}
       />
-      <GameMachine.Activity is="invalidMove">
+      <GameMachine.Activity is={["invalidMove"]}>
           <InvalidMoveMessage />
       </GameMachine.Activity>
     </InfoPanel>

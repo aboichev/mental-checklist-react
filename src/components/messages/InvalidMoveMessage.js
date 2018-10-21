@@ -4,7 +4,7 @@ import styled from 'styled-components'
 const StyledDiv = styled('div')`
     color: ${props => props.color};
     width: ${props => props.width};
-    background-color: 'red';
+    background-color: red;
 `;
 
 const InvalidMoveMessage = ({ ...props }) => (

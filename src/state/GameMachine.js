@@ -97,7 +97,7 @@ const machine = Machine({
                 CALCULATION_DONE: 'challenge' 
               }
             },
-            
+
             invalidMove: {
               onEntry: ['applyTurn'],
               activities: ['invalidMove', 'feedbackDelay'],
