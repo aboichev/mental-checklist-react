@@ -5,6 +5,7 @@ import InfoPanel from 'components/ui/InfoPanel'
 import FirstMoveMessage from 'components/messages/FirstMoveMessage'
 import ChallengeMessage from 'components/messages/ChallengeMessage'
 import MoveMessage from 'components/messages/MoveMessage'
+import InvalidMoveMessage from 'components/messages/InvalidMoveMessage'
 import EventButton from 'components/ui/EventButton'
 import ResponseList from 'components/ui/ResponseList'
 
@@ -12,8 +13,7 @@ const GameScreen = ({ ...props }) => (
   <React.Fragment>
     <ChessBoardWrapper id="board" {...props} />
     <InfoPanel>
-      <GameMachine.State
-          is="main"
+      <GameMachine.Activity is="gameInProgress"
           render={({ extstate }) => (
             <React.Fragment>
               <GameMachine.State 
@@ -31,6 +31,7 @@ const GameScreen = ({ ...props }) => (
               <GameMachine.Activity is="calculate">
                    <div>Thinking...</div>
               </GameMachine.Activity>
+
               <GameMachine.State is="main.game.firstMove">
                 <FirstMoveMessage />
               </GameMachine.State>
@@ -42,7 +43,10 @@ const GameScreen = ({ ...props }) => (
               </GameMachine.State>              
             </React.Fragment>
           )}
-      />   
+      />
+      <GameMachine.Activity is="invalidMove">
+          <InvalidMoveMessage />
+      </GameMachine.Activity>
     </InfoPanel>
   </React.Fragment>
 );

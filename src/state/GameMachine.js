@@ -29,6 +29,7 @@ const machine = Machine({
         
         game: {
           initial: 'challenge',
+          activities: ['gameInProgress'],
           on: {
               START_OVER: 'startScreen',
               GAME_OVER: 'scoreScreen'
@@ -78,18 +79,30 @@ const machine = Machine({
             move: {
               on: {
                 INPUT: {
-                  opponent: {
+                  waitForOpponent: {
                     cond: (extstate, event) => isValidMove(extstate.game, event),
+                    actions: ['applyTurn', 'isGameOver']
+                  },
+                  invalidMove: {
+                    cond: (extstate, event) => !isValidMove(extstate.game, event),
                     actions: ['applyTurn', 'isGameOver']
                   }
                 }
               }
             },
 
-            opponent: {
+            waitForOpponent: {
               activities: ['calculate'],
               on: {
                 CALCULATION_DONE: 'challenge' 
+              }
+            },
+            
+            invalidMove: {
+              onEntry: ['applyTurn'],
+              activities: ['invalidMove', 'feedbackDelay'],
+              on: {
+                TIMEOUT: "move"
               }
             }
           }

@@ -1,5 +1,5 @@
 import { Reducer } from '@avaragado/xstateful';
-import { init, getOpponentMove, validateThreats } from 'game/utils';
+import { init, getOpponentMove, validateThreats, isValidMove } from 'game/utils';
 import { isGameOver } from '../game/utils';
 
 const actions = Reducer.map({  
@@ -55,14 +55,16 @@ const actions = Reducer.map({
   applyTurn: ({ extstate: xs, event }) => {
     const game = xs.game;
 
-    // apply player's move
-    game.move({
-      from: event.input.from,
-      to: event.input.to,
-      promotion: 'q' // NOTE: always promote to a queen for example simplicity
-    });
-
-    return Reducer.update({ game, fen: game.fen() });
+    // // apply player's move
+    // game.move({
+    //   from: event.input.from,
+    //   to: event.input.to,
+    //   promotion: 'q' // NOTE: always promote to a queen for example simplicity
+    // });
+    if (isValidMove(game, event)) {
+      return Reducer.update({ game, fen: game.fen() });
+    }
+    return Reducer.noUpdate();
   },
 
   isGameOver: ({ extstate: xs }) => {

@@ -12,20 +12,15 @@ class ChessBoardComponent extends React.Component {
            'fen:', state.game.fen(),
            'playerSide',
            state.playerSide);
-    //const $ = window.$;
-    //const ChessBoard = window.ChessBoard;
+
     this.$el = $(this.el);
     const board = ChessBoard(this.$el, {
       draggable: true,
       orientation: state.playerSide === 'w' ? 'white' : 'black',
       position: state.game.fen(),
       onDrop: (source, target) => {
+        console.log('onDrop:')
         setTimeout(() => onChange(source, target), 250);
-        //onChange(source, target);
-      },
-      onSnapEnd: () => {
-        console.log('onSnapEnd');
-        //board.position(state.game.fen()); 
       }
    });
    this.board = board;
@@ -46,6 +41,7 @@ class ChessBoardComponent extends React.Component {
   render() {
     if (this.board) {
       this.board.position(this.props.state.game.fen());
+      // console.log("in ChessBoardWrapper render()")
     }
     return <div id="board" ref={el => this.el = el} />;
   }

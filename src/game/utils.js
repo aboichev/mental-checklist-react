@@ -21,8 +21,6 @@ const isGameOver = (game) =>  {
 
 const getOpponentMove = (game, playerSide, strategyName) => {
   
-
-
   const coord = computerMovesStrategies[strategyName](game);
 
   game.move(coord);
