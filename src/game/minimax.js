@@ -1,12 +1,19 @@
 import evaluateBoard from './evaluateBoard'
 
+let positionCount = 0;
+
 const minimax = (depth, game, alpha, beta, isMaximisingPlayer) => {
+    // if (depth === 0) {
+    //     const isBlack = game.turn() === 'b';
+    //     const absValue = evaluateBoard(game.board());
+    //     const sideAdjustedValue = isBlack ? -absValue : absValue;
+    //     return sideAdjustedValue;
+    // }
+    positionCount++;
     if (depth === 0) {
-        const isBlack = game.turn() === 'b';
-        const absValue = evaluateBoard(game.board());
-        const sideAdjustedValue = isBlack ? -absValue : absValue;
-        return sideAdjustedValue;
+        return -evaluateBoard(game.board());
     }
+
 
     const newGameMoves = game.moves();
 
@@ -27,7 +34,7 @@ const minimax = (depth, game, alpha, beta, isMaximisingPlayer) => {
         let bestMove = 9999;
         for (let i = 0; i < newGameMoves.length; i++) {
             game.move(newGameMoves[i]);
-            bestMove = Math.min(bestMove, minimax(depth - 1, game, !isMaximisingPlayer));
+            bestMove = Math.min(bestMove, minimax(depth - 1, game, alpha, beta, !isMaximisingPlayer));
             game.undo();
             beta = Math.min(beta, bestMove);
             if (beta <= alpha) {
@@ -44,16 +51,19 @@ const getBestMove = (depth, game) => {
     let bestMove = -9999;
     let bestMoveFound;
 
+    positionCount = 0;
+
     for(let i = 0; i < newGameMoves.length; i++) {
         const newGameMove = newGameMoves[i];
         game.move(newGameMove);
-        const value = minimax(depth - 1, game, false);
+        const value = minimax(depth - 1, game, -10000, 10000, false);
         game.undo();
         if(value >= bestMove) {
             bestMove = value;
             bestMoveFound = newGameMove;
         }            
     }
+    console.log('positions:', positionCount);
     return bestMoveFound;
 };
 

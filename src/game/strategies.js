@@ -40,7 +40,7 @@ const computerMovesStrategies = {
     },
 
     easy: (game) => {
-      return getBestMove(2, game);
+      return getBestMove(3, game);
     }
  };
 
