@@ -15,12 +15,12 @@ const minimax = (depth, game, alpha, beta, isMaximisingPlayer) => {
     }
 
 
-    const newGameMoves = game.moves();
+    const newGameMoves = game.ugly_moves();
 
     if (isMaximisingPlayer) {
         let bestMove = -9999;
         for (let i = 0; i < newGameMoves.length; i++) {
-            game.move(newGameMoves[i]);
+            game.ugly_move(newGameMoves[i]);
             bestMove = Math.max(bestMove, minimax(depth - 1, game, alpha, beta, !isMaximisingPlayer));
             game.undo();
             alpha = Math.max(alpha, bestMove);
@@ -33,7 +33,7 @@ const minimax = (depth, game, alpha, beta, isMaximisingPlayer) => {
     else {
         let bestMove = 9999;
         for (let i = 0; i < newGameMoves.length; i++) {
-            game.move(newGameMoves[i]);
+            game.ugly_move(newGameMoves[i]);
             bestMove = Math.min(bestMove, minimax(depth - 1, game, alpha, beta, !isMaximisingPlayer));
             game.undo();
             beta = Math.min(beta, bestMove);
@@ -47,7 +47,7 @@ const minimax = (depth, game, alpha, beta, isMaximisingPlayer) => {
 
 const getBestMove = (depth, game) => {
 
-    const newGameMoves = game.moves();
+    const newGameMoves = game.ugly_moves();
     let bestMove = -9999;
     let bestMoveFound;
 
@@ -55,7 +55,7 @@ const getBestMove = (depth, game) => {
 
     for(let i = 0; i < newGameMoves.length; i++) {
         const newGameMove = newGameMoves[i];
-        game.move(newGameMove);
+        game.ugly_move(newGameMove);
         const value = minimax(depth - 1, game, -10000, 10000, false);
         game.undo();
         if(value >= bestMove) {
@@ -64,6 +64,7 @@ const getBestMove = (depth, game) => {
         }            
     }
     console.log('positions:', positionCount);
+    bestMoveFound = game.make_pretty(bestMoveFound)
     return bestMoveFound;
 };
 
