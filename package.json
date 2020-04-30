@@ -5,7 +5,7 @@
   "dependencies": {
     "@avaragado/xstateful": "^0.5.0",
     "@avaragado/xstateful-react": "^0.6.0",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-scripts": "^3.4.1",
